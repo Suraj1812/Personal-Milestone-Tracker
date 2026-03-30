@@ -19,7 +19,7 @@ export function createApp() {
   app.use(
     cors({
       origin: process.env.CLIENT_ORIGIN?.split(",") ?? ["http://localhost:5173"],
-      methods: ["GET", "POST"]
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
     })
   );
   app.use(express.json({ limit: "32kb" }));

@@ -1,7 +1,15 @@
-import type { CreateMilestoneInput, Milestone } from "../types";
+import type {
+  CreateMilestoneInput,
+  Milestone,
+  UpdateMilestoneInput
+} from "../types";
 
 interface ApiErrorPayload {
   message?: string;
+}
+
+interface DeleteMilestoneResponse {
+  id: string;
 }
 
 export class ApiError extends Error {
@@ -64,4 +72,35 @@ export async function createMilestone(
   }
 
   return (await response.json()) as Milestone;
+}
+
+export async function updateMilestone(
+  id: string,
+  payload: UpdateMilestoneInput
+): Promise<Milestone> {
+  const response = await fetch(buildUrl(`/milestones/${id}`), {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    throw await parseError(response);
+  }
+
+  return (await response.json()) as Milestone;
+}
+
+export async function deleteMilestone(id: string): Promise<DeleteMilestoneResponse> {
+  const response = await fetch(buildUrl(`/milestones/${id}`), {
+    method: "DELETE"
+  });
+
+  if (!response.ok) {
+    throw await parseError(response);
+  }
+
+  return (await response.json()) as DeleteMilestoneResponse;
 }

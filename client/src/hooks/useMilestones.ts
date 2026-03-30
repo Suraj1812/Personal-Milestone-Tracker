@@ -1,6 +1,16 @@
 import useSWR from "swr";
-import { fetchMilestones } from "../api/milestones";
-import type { Milestone } from "../types";
+import {
+  createMilestone as createMilestoneRequest,
+  deleteMilestone as deleteMilestoneRequest,
+  fetchMilestones,
+  updateMilestone as updateMilestoneRequest
+} from "../api/milestones";
+import { sortMilestones } from "../lib/milestone-utils";
+import type {
+  CreateMilestoneInput,
+  Milestone,
+  UpdateMilestoneInput
+} from "../types";
 
 export interface UseMilestonesResult {
   milestones: Milestone[];
@@ -8,7 +18,9 @@ export interface UseMilestonesResult {
   isRefreshing: boolean;
   errorMessage: string | null;
   refreshMilestones: () => Promise<Milestone[] | undefined>;
-  syncCreatedMilestone: (milestone: Milestone) => Promise<Milestone[] | undefined>;
+  createMilestoneOptimistic: (payload: CreateMilestoneInput) => Promise<Milestone>;
+  updateMilestoneOptimistic: (id: string, payload: UpdateMilestoneInput) => Promise<Milestone>;
+  deleteMilestoneOptimistic: (id: string) => Promise<void>;
 }
 
 export function useMilestones(): UseMilestonesResult {
@@ -29,12 +41,101 @@ export function useMilestones(): UseMilestonesResult {
     return await mutate();
   }
 
-  async function syncCreatedMilestone(
-    milestone: Milestone
-  ): Promise<Milestone[] | undefined> {
-    return await mutate((currentMilestones = []) => {
-      return [milestone, ...currentMilestones];
-    }, false);
+  async function createMilestoneOptimistic(
+    payload: CreateMilestoneInput
+  ): Promise<Milestone> {
+    const previousMilestones = data ?? [];
+    const optimisticTimestamp = new Date().toISOString();
+    const optimisticMilestone: Milestone = {
+      id: `temp-${optimisticTimestamp}`,
+      title: payload.title.trim(),
+      category: payload.category,
+      date: payload.date,
+      createdAt: optimisticTimestamp,
+      updatedAt: optimisticTimestamp
+    };
+
+    await mutate(sortMilestones([optimisticMilestone, ...previousMilestones]), false);
+
+    try {
+      const createdMilestone = await createMilestoneRequest(payload);
+
+      await mutate((currentMilestones = []) => {
+        return sortMilestones([
+          createdMilestone,
+          ...currentMilestones.filter((milestone) => milestone.id !== optimisticMilestone.id)
+        ]);
+      }, false);
+
+      return createdMilestone;
+    } catch (error) {
+      await mutate(previousMilestones, false);
+      throw error;
+    }
+  }
+
+  async function updateMilestoneOptimistic(
+    id: string,
+    payload: UpdateMilestoneInput
+  ): Promise<Milestone> {
+    const previousMilestones = data ?? [];
+    const existingMilestone = previousMilestones.find((milestone) => milestone.id === id);
+
+    if (!existingMilestone) {
+      const updatedMilestone = await updateMilestoneRequest(id, payload);
+      await mutate(sortMilestones(previousMilestones), false);
+      return updatedMilestone;
+    }
+
+    const optimisticMilestone: Milestone = {
+      ...existingMilestone,
+      title: payload.title.trim(),
+      category: payload.category,
+      date: payload.date,
+      updatedAt: new Date().toISOString()
+    };
+
+    await mutate(
+      sortMilestones(
+        previousMilestones.map((milestone) => {
+          return milestone.id === id ? optimisticMilestone : milestone;
+        })
+      ),
+      false
+    );
+
+    try {
+      const updatedMilestone = await updateMilestoneRequest(id, payload);
+
+      await mutate((currentMilestones = []) => {
+        return sortMilestones(
+          currentMilestones.map((milestone) => {
+            return milestone.id === id ? updatedMilestone : milestone;
+          })
+        );
+      }, false);
+
+      return updatedMilestone;
+    } catch (error) {
+      await mutate(previousMilestones, false);
+      throw error;
+    }
+  }
+
+  async function deleteMilestoneOptimistic(id: string): Promise<void> {
+    const previousMilestones = data ?? [];
+
+    await mutate(
+      previousMilestones.filter((milestone) => milestone.id !== id),
+      false
+    );
+
+    try {
+      await deleteMilestoneRequest(id);
+    } catch (error) {
+      await mutate(previousMilestones, false);
+      throw error;
+    }
   }
 
   return {
@@ -43,6 +144,8 @@ export function useMilestones(): UseMilestonesResult {
     isRefreshing: isValidating && !isLoading,
     errorMessage,
     refreshMilestones,
-    syncCreatedMilestone
+    createMilestoneOptimistic,
+    updateMilestoneOptimistic,
+    deleteMilestoneOptimistic
   };
 }

@@ -1,13 +1,21 @@
 # Personal Milestone Tracker
 
-A production-ready submission for the Frontend Engineer assessment: a responsive React frontend backed by a minimal Express API for creating and listing personal milestones.
+A production-ready milestone tracking app with a calm, product-focused UI and a full Express-backed CRUD flow.
 
 ## Tech Stack
 
 - React 19 + TypeScript + Vite
 - Express + TypeScript + Zod
-- SWR for frontend server-state synchronisation
+- SWR for optimistic server-state synchronisation
 - Standard CSS with a responsive, custom UI
+
+## Features
+
+- Create, edit, and delete milestones with optimistic updates
+- Track milestones by date and filter by category or date range
+- Lightweight feedback states for saving, updating, deleting, and errors
+- SVG favicon, logo, and social preview metadata
+- Production build served from one Node process
 
 ## Project Structure
 
@@ -57,12 +65,13 @@ npm run dev
 - `npm run build` builds both the client and server for production
 - `npm run start` serves the compiled frontend and API from the production server
 - `npm run test` runs backend API tests
+- `npm run verify:e2e` builds the app, starts the production server, and verifies the full flow
 
 ## API Contract
 
 ### `GET /milestones`
 
-Returns all milestones in reverse chronological order.
+Returns all milestones sorted by milestone date and latest update time.
 
 ### `POST /milestones`
 
@@ -71,7 +80,8 @@ Accepts:
 ```json
 {
   "title": "Finished my portfolio redesign",
-  "category": "Work"
+  "category": "Work",
+  "date": "2026-03-30"
 }
 ```
 
@@ -79,6 +89,15 @@ Validation rules:
 
 - `title` is required and must be at least 3 characters long
 - `category` must be one of `Work`, `Personal`, or `Health`
+- `date` must be a valid `YYYY-MM-DD` value
+
+### `PUT /milestones/:id`
+
+Updates an existing milestone with the same payload shape as `POST /milestones`.
+
+### `DELETE /milestones/:id`
+
+Deletes a milestone and returns the deleted id.
 
 ## Production Build
 
@@ -89,22 +108,30 @@ npm run start
 
 After building, the Express server serves the compiled frontend and the API from the same process.
 
-## Deploy
+## Railway Deploy
 
-This repository is ready to deploy as a single Node web service on platforms like Render or Railway.
+This repository is ready to deploy as a single Node web service on Railway.
 
-### Render
+Railway config is pinned in `railway.json`, including:
 
-1. Connect this GitHub repo in Render.
-2. Create a new `Web Service`.
-3. Use:
+- `npm run build` as the build command
+- `npm run start` as the start command
+- `/health` as the healthcheck path
+
+If you want to verify locally before deploying:
+
+```bash
+npm run verify:e2e
+```
+
+If you prefer to configure Railway manually in the dashboard, use:
 
 ```bash
 Build Command: npm install && npm run build
 Start Command: npm run start
 ```
 
-4. Set the environment to Node and deploy.
+No additional environment variables are required.
 
 ## Note
 

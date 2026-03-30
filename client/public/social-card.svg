@@ -1,0 +1,41 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#F5F2EB"/>
+  <rect x="56" y="56" width="1088" height="518" rx="36" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+  <rect x="96" y="96" width="88" height="88" rx="24" fill="#0F172A"/>
+  <rect x="108" y="108" width="64" height="64" rx="18" fill="url(#paint0_linear_186_3)"/>
+  <path d="M120 150.5L132 138.5L141 144.5L159 126.5" stroke="#F8FAFC" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="120" cy="150.5" r="5" fill="#14B8A6"/>
+  <circle cx="132" cy="138.5" r="5" fill="#1947E5"/>
+  <circle cx="141" cy="144.5" r="5" fill="#F59E0B"/>
+  <circle cx="159" cy="126.5" r="5" fill="#F8FAFC"/>
+  <text x="220" y="147" fill="#172033" font-family="Avenir Next, Segoe UI, sans-serif" font-size="40" font-weight="700">
+    Personal Milestone Tracker
+  </text>
+  <text x="96" y="272" fill="#172033" font-family="Avenir Next, Segoe UI, sans-serif" font-size="82" font-weight="700">
+    Track progress with real
+  </text>
+  <text x="96" y="356" fill="#172033" font-family="Avenir Next, Segoe UI, sans-serif" font-size="82" font-weight="700">
+    dates, editing, and filters.
+  </text>
+  <text x="96" y="438" fill="#5D687A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="30">
+    Clean full-stack milestone tracking with category and date-based review.
+  </text>
+  <rect x="96" y="486" width="180" height="46" rx="23" fill="#E9EFFF"/>
+  <text x="126" y="516" fill="#1947E5" font-family="Avenir Next, Segoe UI, sans-serif" font-size="24" font-weight="700">
+    Work
+  </text>
+  <rect x="292" y="486" width="180" height="46" rx="23" fill="#FFF3DC"/>
+  <text x="322" y="516" fill="#B45309" font-family="Avenir Next, Segoe UI, sans-serif" font-size="24" font-weight="700">
+    Personal
+  </text>
+  <rect x="488" y="486" width="180" height="46" rx="23" fill="#E6F7F4"/>
+  <text x="518" y="516" fill="#0F766E" font-family="Avenir Next, Segoe UI, sans-serif" font-size="24" font-weight="700">
+    Health
+  </text>
+  <defs>
+    <linearGradient id="paint0_linear_186_3" x1="114" y1="114" x2="166" y2="166" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1137B7"/>
+      <stop offset="1" stop-color="#1947E5"/>
+    </linearGradient>
+  </defs>
+</svg>
