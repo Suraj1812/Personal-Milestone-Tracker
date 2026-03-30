@@ -12,15 +12,17 @@ interface MilestoneListProps {
   isRefreshing: boolean;
   deletingMilestoneId: string | null;
   editingMilestoneId: string | null;
+  pendingDeleteMilestoneId: string | null;
   errorMessage: string | null;
   filterCounts: Record<MilestoneFilterCategory, number>;
+  onOpenComposer: () => void;
   onRefresh: () => Promise<void>;
   onSelectCategoryFilter: (filter: MilestoneFilterCategory) => void;
   onStartDateFilterChange: (value: string) => void;
   onEndDateFilterChange: (value: string) => void;
   onClearFilters: () => void;
   onEditMilestone: (milestone: Milestone) => void;
-  onDeleteMilestone: (milestone: Milestone) => Promise<void>;
+  onRequestDeleteMilestone: (milestone: Milestone) => void;
 }
 
 export function MilestoneList({
@@ -31,15 +33,17 @@ export function MilestoneList({
   isRefreshing,
   deletingMilestoneId,
   editingMilestoneId,
+  pendingDeleteMilestoneId,
   errorMessage,
   filterCounts,
+  onOpenComposer,
   onRefresh,
   onSelectCategoryFilter,
   onStartDateFilterChange,
   onEndDateFilterChange,
   onClearFilters,
   onEditMilestone,
-  onDeleteMilestone
+  onRequestDeleteMilestone
 }: MilestoneListProps): ReactElement {
   const hasActiveFilters =
     activeFilters.category !== "All" ||
@@ -50,15 +54,21 @@ export function MilestoneList({
     <section className="panel">
       <div className="panel__header">
         <div>
-          <p className="eyebrow">Milestones</p>
-          <h2>{hasActiveFilters ? "Filtered results" : "All milestones"}</h2>
+          <h2>{hasActiveFilters ? "Filtered tasks" : "Tasks"}</h2>
           <p className="panel__meta">
-            {hasActiveFilters ? `${milestones.length} shown` : `${totalMilestones} total`}
+            {hasActiveFilters
+              ? `Showing ${milestones.length} of ${totalMilestones}`
+              : `${totalMilestones} total`}
           </p>
         </div>
-        <button className="secondary-button" onClick={onRefresh} type="button">
-          {isRefreshing ? "Refreshing..." : "Refresh"}
-        </button>
+        <div className="panel__actions">
+          <button className="primary-button primary-button--compact" onClick={onOpenComposer} type="button">
+            Add task
+          </button>
+          <button className="secondary-button secondary-button--compact" onClick={onRefresh} type="button">
+            {isRefreshing ? "Refreshing..." : "Reload"}
+          </button>
+        </div>
       </div>
 
       <MilestoneFilters
@@ -74,7 +84,7 @@ export function MilestoneList({
 
       {errorMessage ? (
         <div className="empty-state empty-state--error" role="alert">
-          <h3>We could not load your milestones.</h3>
+          <h3>Couldn&apos;t load entries.</h3>
           <p>{errorMessage}</p>
         </div>
       ) : null}
@@ -91,13 +101,13 @@ export function MilestoneList({
         <div className="empty-state">
           <h3>
             {hasActiveFilters
-              ? "No milestones match these filters"
-              : "No milestones yet"}
+              ? "No matches"
+              : "No entries yet"}
           </h3>
           <p>
             {hasActiveFilters
-              ? "Try widening the date range or switching categories."
-              : "Add your first entry to start building a useful record of progress."}
+              ? "Try another range or category."
+              : "Use Add task to create one."}
           </p>
         </div>
       ) : null}
@@ -108,9 +118,10 @@ export function MilestoneList({
             <MilestoneCard
               isDeleting={deletingMilestoneId === milestone.id}
               isEditing={editingMilestoneId === milestone.id}
+              isPendingDelete={pendingDeleteMilestoneId === milestone.id}
               key={milestone.id}
               milestone={milestone}
-              onDeleteMilestone={onDeleteMilestone}
+              onRequestDeleteMilestone={onRequestDeleteMilestone}
               onEditMilestone={onEditMilestone}
             />
           ))}

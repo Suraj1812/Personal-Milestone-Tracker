@@ -67,7 +67,7 @@ async function assertRootHtml() {
     throw new Error("/ did not return HTML.");
   }
 
-  if (!html.includes("<title>Personal Milestone Tracker</title>")) {
+  if (!html.includes("<title>Milestone Log</title>")) {
     throw new Error("The built frontend was not served from /.");
   }
 

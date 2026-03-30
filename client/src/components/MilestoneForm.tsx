@@ -12,29 +12,19 @@ import {
   type Milestone,
   type MilestoneCategory
 } from "../types";
-import { StatusBanner } from "./StatusBanner";
-
-export interface SubmissionResult {
-  ok: boolean;
-}
+import { DialogShell } from "./DialogShell";
 
 interface MilestoneFormProps {
   isSubmitting: boolean;
   editingMilestone: Milestone | null;
-  errorMessage: string | null;
-  successMessage: string | null;
-  onCancelEditing: () => void;
-  onStartEditing: () => void;
-  onSubmit: (payload: CreateMilestoneInput) => Promise<SubmissionResult>;
+  onCancel: () => void;
+  onSubmit: (payload: CreateMilestoneInput) => Promise<boolean>;
 }
 
 export function MilestoneForm({
   isSubmitting,
   editingMilestone,
-  errorMessage,
-  successMessage,
-  onCancelEditing,
-  onStartEditing,
+  onCancel,
   onSubmit
 }: MilestoneFormProps): ReactElement {
   const [title, setTitle] = useState("");
@@ -61,77 +51,57 @@ export function MilestoneForm({
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
-
-    const result = await onSubmit({
+    await onSubmit({
       title,
       category,
       date
     });
-
-    if (result.ok && !editingMilestone) {
-      setTitle("");
-      setCategory("Work");
-      setDate(getTodayDate());
-    }
   }
 
   function handleTitleChange(event: ChangeEvent<HTMLInputElement>): void {
     setTitle(event.target.value);
-    onStartEditing();
   }
 
   function handleCategoryChange(categoryOption: MilestoneCategory): void {
     setCategory(categoryOption);
-    onStartEditing();
   }
 
   function handleDateChange(event: ChangeEvent<HTMLInputElement>): void {
     setDate(event.target.value);
-    onStartEditing();
   }
 
   const isSubmitDisabled = isSubmitting || trimmedTitle.length < 3 || date.length === 0;
   const isEditing = editingMilestone !== null;
 
   return (
-    <section className="panel panel--form">
-      <div className="panel__header">
-        <div>
-          <p className="eyebrow">{isEditing ? "Editing" : "Add"}</p>
-          <h2>{isEditing ? "Edit milestone" : "New milestone"}</h2>
-          <p className="panel__meta">
-            {isEditing ? "Update the selected item." : "Add a title, date, and category."}
-          </p>
-        </div>
-      </div>
-
+    <DialogShell
+      description={isEditing ? "Update the selected task." : "Add a title, date, and category."}
+      eyebrow={isEditing ? "Edit task" : "Add task"}
+      onClose={onCancel}
+      title={isEditing ? "Edit task" : "New task"}
+    >
       <form className="milestone-form" onSubmit={handleSubmit}>
         <label className="field">
           <div className="field__row">
             <span>Title</span>
-            <small>{trimmedTitle.length}/3 minimum</small>
+            <small>{trimmedTitle.length}/3</small>
           </div>
           <input
             autoComplete="off"
+            autoFocus
             className={titleError ? "field__input field__input--error" : "field__input"}
             minLength={3}
             name="title"
             onChange={handleTitleChange}
-            placeholder="e.g. Finished onboarding presentation"
+            placeholder="Finished onboarding presentation"
             required
             value={title}
           />
-          {titleError ? (
-            <small className="field__hint field__hint--error">{titleError}</small>
-          ) : (
-            <small className="field__hint">Use a short, specific title.</small>
-          )}
+          {titleError ? <small className="field__hint field__hint--error">{titleError}</small> : null}
         </label>
 
         <label className="field">
-          <div className="field__row">
-            <span>Date</span>
-          </div>
+          <span>Date</span>
           <input
             className="field__input"
             name="date"
@@ -161,19 +131,14 @@ export function MilestoneForm({
         </fieldset>
 
         <div className="form-actions">
-          {isEditing ? (
-            <button className="secondary-button" onClick={onCancelEditing} type="button">
-              Cancel
-            </button>
-          ) : null}
+          <button className="secondary-button" onClick={onCancel} type="button">
+            Cancel
+          </button>
           <button className="primary-button" disabled={isSubmitDisabled} type="submit">
-            {isSubmitting ? "Saving..." : isEditing ? "Save changes" : "Save"}
+            {isSubmitting ? "Saving..." : isEditing ? "Save changes" : "Add task"}
           </button>
         </div>
       </form>
-
-      {errorMessage ? <StatusBanner message={errorMessage} tone="error" /> : null}
-      {successMessage ? <StatusBanner message={successMessage} tone="success" /> : null}
-    </section>
+    </DialogShell>
   );
 }

@@ -1,19 +1,23 @@
 # Personal Milestone Tracker
 
-A production-ready milestone tracking app with a calm, product-focused UI and a full Express-backed CRUD flow.
+A production-ready milestone tracking app with a cleaner product-style UI and a full Express-backed CRUD flow.
 
 ## Tech Stack
 
 - React 19 + TypeScript + Vite
 - Express + TypeScript + Zod
 - SWR for optimistic server-state synchronisation
+- Sonner for toast notifications
 - Standard CSS with a responsive, custom UI
 
 ## Features
 
-- Create, edit, and delete milestones with optimistic updates
+- Create and edit milestones from a popup form
+- Confirm deletes in a dedicated popup before removing data
+- Optimistic create, update, and delete flows with synced list state
+- Toast feedback for save, update, delete, refresh, and error states
 - Track milestones by date and filter by category or date range
-- Lightweight feedback states for saving, updating, deleting, and errors
+- Responsive single-panel layout with tighter spacing and cleaner hierarchy
 - SVG favicon, logo, and social preview metadata
 - Production build served from one Node process
 
@@ -66,6 +70,14 @@ npm run dev
 - `npm run start` serves the compiled frontend and API from the production server
 - `npm run test` runs backend API tests
 - `npm run verify:e2e` builds the app, starts the production server, and verifies the full flow
+
+## Product Behaviour
+
+- The UI uses task-style labels such as `Add task`, `Edit task`, and `Delete task`
+- The assessment API contract remains milestone-based with `/milestones` routes
+- Add and edit run in the same modal flow
+- Delete uses a confirmation dialog before the API call is made
+- Toasts are used instead of inline success banners for mutation feedback
 
 ## API Contract
 

@@ -6,7 +6,8 @@ interface MilestoneCardProps {
   milestone: Milestone;
   isDeleting: boolean;
   isEditing: boolean;
-  onDeleteMilestone: (milestone: Milestone) => Promise<void>;
+  isPendingDelete: boolean;
+  onRequestDeleteMilestone: (milestone: Milestone) => void;
   onEditMilestone: (milestone: Milestone) => void;
 }
 
@@ -14,7 +15,8 @@ export function MilestoneCard({
   milestone,
   isDeleting,
   isEditing,
-  onDeleteMilestone,
+  isPendingDelete,
+  onRequestDeleteMilestone,
   onEditMilestone
 }: MilestoneCardProps): ReactElement {
   const wasEdited = milestone.updatedAt !== milestone.createdAt;
@@ -24,43 +26,43 @@ export function MilestoneCard({
       className={
         isEditing
           ? `milestone-card milestone-card--${milestone.category.toLowerCase()} milestone-card--editing`
-          : `milestone-card milestone-card--${milestone.category.toLowerCase()}`
+          : isPendingDelete
+            ? `milestone-card milestone-card--${milestone.category.toLowerCase()} milestone-card--pending`
+            : `milestone-card milestone-card--${milestone.category.toLowerCase()}`
       }
     >
-      <div className="milestone-card__top">
-        <div className="milestone-card__badges">
+      <div className="milestone-card__body">
+        <div className="milestone-card__headline">
+          <p className="milestone-card__title">{milestone.title}</p>
+          {isEditing ? <span className="milestone-card__editing-badge">Editing</span> : null}
+        </div>
+        <div className="milestone-card__details">
           <span className={`category-pill category-pill--${milestone.category.toLowerCase()}`}>
             {milestone.category}
           </span>
-          {isEditing ? <span className="milestone-card__editing-badge">Editing</span> : null}
+          <span className="milestone-card__detail">{formatMilestoneDate(milestone.date)}</span>
+          <span className="milestone-card__detail">
+            {wasEdited ? "Updated" : "Saved"} {formatTimestamp(milestone.updatedAt)}
+          </span>
         </div>
-        <span className="milestone-card__tracked-date">{formatMilestoneDate(milestone.date)}</span>
       </div>
-
-      <p className="milestone-card__title">{milestone.title}</p>
-
-      <div className="milestone-card__footer">
-        <small className="milestone-card__meta">
-          {wasEdited ? "Updated" : "Saved"} {formatTimestamp(milestone.updatedAt)}
-        </small>
-        <div className="milestone-card__actions">
-          <button
-            aria-pressed={isEditing}
-            className={isEditing ? "action-button action-button--active" : "action-button"}
-            onClick={() => onEditMilestone(milestone)}
-            type="button"
-          >
-            Edit
-          </button>
-          <button
-            className="action-button action-button--danger"
-            disabled={isDeleting}
-            onClick={() => onDeleteMilestone(milestone)}
-            type="button"
-          >
-            {isDeleting ? "Deleting..." : "Delete"}
-          </button>
-        </div>
+      <div className="milestone-card__actions">
+        <button
+          aria-pressed={isEditing}
+          className={isEditing ? "action-button action-button--active" : "action-button"}
+          onClick={() => onEditMilestone(milestone)}
+          type="button"
+        >
+          Edit
+        </button>
+        <button
+          className="action-button action-button--danger"
+          disabled={isDeleting}
+          onClick={() => onRequestDeleteMilestone(milestone)}
+          type="button"
+        >
+          {isDeleting ? "Deleting..." : "Delete"}
+        </button>
       </div>
     </li>
   );
