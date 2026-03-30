@@ -53,7 +53,7 @@ export function MilestoneList({
           <p className="eyebrow">Milestones</p>
           <h2>{hasActiveFilters ? "Filtered results" : "All milestones"}</h2>
           <p className="panel__meta">
-            {milestones.length} of {totalMilestones}
+            {hasActiveFilters ? `${milestones.length} shown` : `${totalMilestones} total`}
           </p>
         </div>
         <button className="secondary-button" onClick={onRefresh} type="button">

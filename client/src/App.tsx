@@ -160,7 +160,7 @@ export function App(): ReactElement {
               <h1>Personal Milestone Tracker</h1>
             </div>
           </div>
-          <p className="app-header__note">Track progress by date and category.</p>
+          <p className="app-header__note">Track by date and category.</p>
         </div>
 
         <div className="app-stats" aria-label="Milestone summary">
