@@ -43,8 +43,6 @@ export function App(): ReactElement {
   const [activeDialog, setActiveDialog] = useState<ActiveDialog>(null);
   const [activeCategoryFilter, setActiveCategoryFilter] =
     useState<MilestoneFilterCategory>("All");
-  const [startDateFilter, setStartDateFilter] = useState("");
-  const [endDateFilter, setEndDateFilter] = useState("");
 
   const editingMilestone =
     activeDialog?.type === "task" ? activeDialog.milestone : null;
@@ -151,19 +149,13 @@ export function App(): ReactElement {
 
   function clearFilters(): void {
     setActiveCategoryFilter("All");
-    setStartDateFilter("");
-    setEndDateFilter("");
   }
 
   const filteredMilestones = filterMilestones(milestones, {
-    category: activeCategoryFilter,
-    startDate: startDateFilter,
-    endDate: endDateFilter
+    category: activeCategoryFilter
   });
   const activeFilters = {
-    category: activeCategoryFilter,
-    startDate: startDateFilter,
-    endDate: endDateFilter
+    category: activeCategoryFilter
   };
   const filterCounts: Record<MilestoneFilterCategory, number> = {
     All: milestones.length,
@@ -196,12 +188,10 @@ export function App(): ReactElement {
             milestones={filteredMilestones}
             onClearFilters={clearFilters}
             onEditMilestone={handleEditMilestone}
-            onEndDateFilterChange={setEndDateFilter}
             onOpenComposer={handleOpenComposer}
             onRefresh={handleRefresh}
             onRequestDeleteMilestone={handleRequestDeleteMilestone}
             onSelectCategoryFilter={setActiveCategoryFilter}
-            onStartDateFilterChange={setStartDateFilter}
             pendingDeleteMilestoneId={milestonePendingDelete?.id ?? null}
             totalMilestones={milestones.length}
           />

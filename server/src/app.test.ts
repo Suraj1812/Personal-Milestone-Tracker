@@ -48,8 +48,7 @@ describe("milestones API", () => {
     const request = {
       body: {
         title: "Completed the assessment build",
-        category: "Work",
-        date: "2026-03-30"
+        category: "Work"
       }
     } as Request;
     const response = createMockResponse();
@@ -59,8 +58,7 @@ describe("milestones API", () => {
     expect(response.statusCode).toBe(201);
     expect(response.body).toMatchObject({
       title: "Completed the assessment build",
-      category: "Work",
-      date: "2026-03-30"
+      category: "Work"
     });
     expect(response.body).toHaveProperty("id");
     expect(response.body).toHaveProperty("createdAt");
@@ -71,8 +69,7 @@ describe("milestones API", () => {
     const request = {
       body: {
         title: "  Completed the assessment build  ",
-        category: "Work",
-        date: "2026-03-30"
+        category: "Work"
       }
     } as Request;
     const response = createMockResponse();
@@ -82,8 +79,7 @@ describe("milestones API", () => {
     expect(response.statusCode).toBe(201);
     expect(response.body).toMatchObject({
       title: "Completed the assessment build",
-      category: "Work",
-      date: "2026-03-30"
+      category: "Work"
     });
   });
 
@@ -91,8 +87,7 @@ describe("milestones API", () => {
     const request = {
       body: {
         title: "Hi",
-        category: "Personal",
-        date: "2026-03-30"
+        category: "Personal"
       }
     } as Request;
     const response = createMockResponse();
@@ -109,8 +104,7 @@ describe("milestones API", () => {
     const request = {
       body: {
         title: "Finished the weekly reflection",
-        category: "Other",
-        date: "2026-03-30"
+        category: "Other"
       }
     } as Request;
     const response = createMockResponse();
@@ -123,30 +117,11 @@ describe("milestones API", () => {
     });
   });
 
-  it("rejects invalid milestone dates", () => {
-    const request = {
-      body: {
-        title: "Finished the weekly reflection",
-        category: "Work",
-        date: "2026-31-99"
-      }
-    } as Request;
-    const response = createMockResponse();
-
-    handleCreateMilestone(request, response, () => undefined);
-
-    expect(response.statusCode).toBe(400);
-    expect(response.body).toEqual({
-      message: "Please choose a valid date."
-    });
-  });
-
   it("updates an existing milestone", () => {
     const createRequest = {
       body: {
         title: "Completed the assessment build",
-        category: "Work",
-        date: "2026-03-30"
+        category: "Work"
       }
     } as Request;
     const createResponse = createMockResponse();
@@ -160,8 +135,7 @@ describe("milestones API", () => {
       },
       body: {
         title: "Completed the assessment build review",
-        category: "Personal",
-        date: "2026-03-29"
+        category: "Personal"
       }
     } as unknown as Request;
     const updateResponse = createMockResponse();
@@ -172,8 +146,7 @@ describe("milestones API", () => {
     expect(updateResponse.body).toMatchObject({
       id: createdMilestone.id,
       title: "Completed the assessment build review",
-      category: "Personal",
-      date: "2026-03-29"
+      category: "Personal"
     });
   });
 
@@ -184,8 +157,7 @@ describe("milestones API", () => {
       },
       body: {
         title: "Completed the assessment build review",
-        category: "Personal",
-        date: "2026-03-29"
+        category: "Personal"
       }
     } as unknown as Request;
     const response = createMockResponse();
@@ -202,8 +174,7 @@ describe("milestones API", () => {
     const createRequest = {
       body: {
         title: "Completed the assessment build",
-        category: "Work",
-        date: "2026-03-30"
+        category: "Work"
       }
     } as Request;
     const createResponse = createMockResponse();

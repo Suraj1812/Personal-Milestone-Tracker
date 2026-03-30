@@ -1,5 +1,4 @@
 import type { ReactElement } from "react";
-import { formatMilestoneDate } from "../lib/milestone-utils";
 import type { Milestone } from "../types";
 import { DialogShell } from "./DialogShell";
 
@@ -30,7 +29,6 @@ export function DeleteDialog({
             <span className={`category-pill category-pill--${milestone.category.toLowerCase()}`}>
               {milestone.category}
             </span>
-            <span className="milestone-card__detail">{formatMilestoneDate(milestone.date)}</span>
           </div>
         </div>
 

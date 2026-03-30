@@ -5,7 +5,6 @@ import {
   type FormEvent,
   type ReactElement
 } from "react";
-import { getTodayDate } from "../lib/milestone-utils";
 import {
   milestoneCategories,
   type CreateMilestoneInput,
@@ -29,7 +28,6 @@ export function MilestoneForm({
 }: MilestoneFormProps): ReactElement {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState<MilestoneCategory>("Work");
-  const [date, setDate] = useState(getTodayDate());
   const trimmedTitle = title.trim();
   const titleError =
     trimmedTitle.length > 0 && trimmedTitle.length < 3
@@ -40,21 +38,18 @@ export function MilestoneForm({
     if (editingMilestone) {
       setTitle(editingMilestone.title);
       setCategory(editingMilestone.category);
-      setDate(editingMilestone.date);
       return;
     }
 
     setTitle("");
     setCategory("Work");
-    setDate(getTodayDate());
   }, [editingMilestone]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
     await onSubmit({
       title,
-      category,
-      date
+      category
     });
   }
 
@@ -65,17 +60,12 @@ export function MilestoneForm({
   function handleCategoryChange(categoryOption: MilestoneCategory): void {
     setCategory(categoryOption);
   }
-
-  function handleDateChange(event: ChangeEvent<HTMLInputElement>): void {
-    setDate(event.target.value);
-  }
-
-  const isSubmitDisabled = isSubmitting || trimmedTitle.length < 3 || date.length === 0;
+  const isSubmitDisabled = isSubmitting || trimmedTitle.length < 3;
   const isEditing = editingMilestone !== null;
 
   return (
     <DialogShell
-      description={isEditing ? "Update the selected task." : "Add a title, date, and category."}
+      description={isEditing ? "Update the selected task." : "Add a title and category."}
       eyebrow={isEditing ? "Edit task" : "Add task"}
       onClose={onCancel}
       title={isEditing ? "Edit task" : "New task"}
@@ -98,18 +88,6 @@ export function MilestoneForm({
             value={title}
           />
           {titleError ? <small className="field__hint field__hint--error">{titleError}</small> : null}
-        </label>
-
-        <label className="field">
-          <span>Date</span>
-          <input
-            className="field__input"
-            name="date"
-            onChange={handleDateChange}
-            required
-            type="date"
-            value={date}
-          />
         </label>
 
         <fieldset className="field fieldset">

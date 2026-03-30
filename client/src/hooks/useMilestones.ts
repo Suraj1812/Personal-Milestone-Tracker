@@ -50,7 +50,6 @@ export function useMilestones(): UseMilestonesResult {
       id: `temp-${optimisticTimestamp}`,
       title: payload.title.trim(),
       category: payload.category,
-      date: payload.date,
       createdAt: optimisticTimestamp,
       updatedAt: optimisticTimestamp
     };
@@ -91,7 +90,6 @@ export function useMilestones(): UseMilestonesResult {
       ...existingMilestone,
       title: payload.title.trim(),
       category: payload.category,
-      date: payload.date,
       updatedAt: new Date().toISOString()
     };
 

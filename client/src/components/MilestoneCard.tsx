@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { formatMilestoneDate, formatTimestamp } from "../lib/milestone-utils";
+import { formatTimestamp } from "../lib/milestone-utils";
 import type { Milestone } from "../types";
 
 interface MilestoneCardProps {
@@ -40,7 +40,6 @@ export function MilestoneCard({
           <span className={`category-pill category-pill--${milestone.category.toLowerCase()}`}>
             {milestone.category}
           </span>
-          <span className="milestone-card__detail">{formatMilestoneDate(milestone.date)}</span>
           <span className="milestone-card__detail">
             {wasEdited ? "Updated" : "Saved"} {formatTimestamp(milestone.updatedAt)}
           </span>

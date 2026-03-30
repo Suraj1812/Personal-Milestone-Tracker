@@ -147,8 +147,7 @@ async function main() {
     const shortTitleResponse = await assertPost(
       {
         title: "Hi",
-        category: "Work",
-        date: "2026-03-30"
+        category: "Work"
       },
       400
     );
@@ -160,8 +159,7 @@ async function main() {
     const invalidCategoryResponse = await assertPost(
       {
         title: "Finished monthly review",
-        category: "Other",
-        date: "2026-03-30"
+        category: "Other"
       },
       400
     );
@@ -170,24 +168,10 @@ async function main() {
       throw new Error("Category validation did not return the expected message.");
     }
 
-    const invalidDateResponse = await assertPost(
-      {
-        title: "Finished monthly review",
-        category: "Work",
-        date: "2026-99-99"
-      },
-      400
-    );
-
-    if (invalidDateResponse.message !== "Please choose a valid date.") {
-      throw new Error("Date validation did not return the expected message.");
-    }
-
     const createdMilestone = await assertPost(
       {
         title: "  Finished monthly review  ",
-        category: "Work",
-        date: "2026-03-25"
+        category: "Work"
       },
       201
     );
@@ -196,16 +180,11 @@ async function main() {
       throw new Error("Created milestone title was not trimmed before storage.");
     }
 
-    if (createdMilestone.date !== "2026-03-25") {
-      throw new Error("Created milestone date was not stored correctly.");
-    }
-
     const updatedMilestone = await assertPut(
       createdMilestone.id,
       {
         title: "Finished monthly review and retro",
-        category: "Personal",
-        date: "2026-03-26"
+        category: "Personal"
       },
       200
     );
@@ -214,7 +193,7 @@ async function main() {
       throw new Error("Updated milestone title was not returned correctly.");
     }
 
-    if (updatedMilestone.category !== "Personal" || updatedMilestone.date !== "2026-03-26") {
+    if (updatedMilestone.category !== "Personal") {
       throw new Error("Updated milestone values were not returned correctly.");
     }
 

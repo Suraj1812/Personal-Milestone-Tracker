@@ -12,13 +12,13 @@
     Personal Milestone Tracker
   </text>
   <text x="96" y="272" fill="#172033" font-family="Avenir Next, Segoe UI, sans-serif" font-size="82" font-weight="700">
-    Track progress with real
+    Track progress with clean
   </text>
   <text x="96" y="356" fill="#172033" font-family="Avenir Next, Segoe UI, sans-serif" font-size="82" font-weight="700">
-    dates, editing, and filters.
+    editing and filters.
   </text>
   <text x="96" y="438" fill="#5D687A" font-family="Avenir Next, Segoe UI, sans-serif" font-size="30">
-    Clean full-stack milestone tracking with category and date-based review.
+    Clean full-stack milestone tracking with category-based review.
   </text>
   <rect x="96" y="486" width="180" height="46" rx="23" fill="#E9EFFF"/>
   <text x="126" y="516" fill="#1947E5" font-family="Avenir Next, Segoe UI, sans-serif" font-size="24" font-weight="700">

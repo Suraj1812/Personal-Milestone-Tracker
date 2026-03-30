@@ -18,8 +18,6 @@ interface MilestoneListProps {
   onOpenComposer: () => void;
   onRefresh: () => Promise<void>;
   onSelectCategoryFilter: (filter: MilestoneFilterCategory) => void;
-  onStartDateFilterChange: (value: string) => void;
-  onEndDateFilterChange: (value: string) => void;
   onClearFilters: () => void;
   onEditMilestone: (milestone: Milestone) => void;
   onRequestDeleteMilestone: (milestone: Milestone) => void;
@@ -39,16 +37,11 @@ export function MilestoneList({
   onOpenComposer,
   onRefresh,
   onSelectCategoryFilter,
-  onStartDateFilterChange,
-  onEndDateFilterChange,
   onClearFilters,
   onEditMilestone,
   onRequestDeleteMilestone
 }: MilestoneListProps): ReactElement {
-  const hasActiveFilters =
-    activeFilters.category !== "All" ||
-    activeFilters.startDate.length > 0 ||
-    activeFilters.endDate.length > 0;
+  const hasActiveFilters = activeFilters.category !== "All";
 
   return (
     <section className="panel">
@@ -73,13 +66,9 @@ export function MilestoneList({
 
       <MilestoneFilters
         activeCategoryFilter={activeFilters.category}
-        endDate={activeFilters.endDate}
         filterCounts={filterCounts}
         onCategoryFilterChange={onSelectCategoryFilter}
         onClearFilters={onClearFilters}
-        onEndDateChange={onEndDateFilterChange}
-        onStartDateChange={onStartDateFilterChange}
-        startDate={activeFilters.startDate}
       />
 
       {errorMessage ? (

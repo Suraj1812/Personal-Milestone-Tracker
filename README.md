@@ -16,7 +16,7 @@ A production-ready milestone tracking app with a cleaner product-style UI and a 
 - Confirm deletes in a dedicated popup before removing data
 - Optimistic create, update, and delete flows with synced list state
 - Toast feedback for save, update, delete, refresh, and error states
-- Track milestones by date and filter by category or date range
+- Filter milestones by category
 - Responsive single-panel layout with tighter spacing and cleaner hierarchy
 - SVG favicon, logo, and social preview metadata
 - Production build served from one Node process
@@ -83,7 +83,7 @@ npm run dev
 
 ### `GET /milestones`
 
-Returns all milestones sorted by milestone date and latest update time.
+Returns all milestones sorted by latest update time.
 
 ### `POST /milestones`
 
@@ -92,8 +92,7 @@ Accepts:
 ```json
 {
   "title": "Finished my portfolio redesign",
-  "category": "Work",
-  "date": "2026-03-30"
+  "category": "Work"
 }
 ```
 
@@ -101,7 +100,6 @@ Validation rules:
 
 - `title` is required and must be at least 3 characters long
 - `category` must be one of `Work`, `Personal`, or `Health`
-- `date` must be a valid `YYYY-MM-DD` value
 
 ### `PUT /milestones/:id`
 

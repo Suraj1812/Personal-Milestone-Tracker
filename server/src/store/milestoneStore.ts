@@ -4,12 +4,6 @@ import type { CreateMilestoneInput, Milestone, UpdateMilestoneInput } from "../t
 const milestones: Milestone[] = [];
 
 function sortMilestonesByNewest(first: Milestone, second: Milestone): number {
-  const dateComparison = second.date.localeCompare(first.date);
-
-  if (dateComparison !== 0) {
-    return dateComparison;
-  }
-
   return new Date(second.updatedAt).getTime() - new Date(first.updatedAt).getTime();
 }
 
@@ -23,7 +17,6 @@ export function createMilestone(input: CreateMilestoneInput): Milestone {
     id: randomUUID(),
     title: input.title.trim(),
     category: input.category,
-    date: input.date,
     createdAt: timestamp,
     updatedAt: timestamp
   };
@@ -45,7 +38,6 @@ export function updateMilestone(id: string, input: UpdateMilestoneInput): Milest
     ...existingMilestone,
     title: input.title.trim(),
     category: input.category,
-    date: input.date,
     updatedAt: new Date().toISOString()
   };
 
